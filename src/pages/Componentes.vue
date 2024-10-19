@@ -1,4 +1,4 @@
-v<template>
+<template>
   <ListarComponentes />
 </template>
 

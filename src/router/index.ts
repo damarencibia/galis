@@ -12,7 +12,7 @@ const customRoutes = [
   {
     path: '/listarcomponentes',
     name: 'listarComponentes',
-    component: () => import('@/pages/listarComponentes.vue'),
+    component: () => import('@/pages/Componentes.vue'),
     meta: { requiresAuth: true },
   },
 ];
