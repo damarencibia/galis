@@ -92,7 +92,7 @@ export default {
         const token = response.data.token;
         localStorage.setItem('authToken', token); // Almacena el token en localStorage
         alert('Inicio de sesión exitoso');
-        this.$router.push('/home');
+        this.$router.push('/homeprovider');
       } catch (error) {
         alert('Credenciales incorrectas');
       }
