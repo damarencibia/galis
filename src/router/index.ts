@@ -30,10 +30,7 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const isAuthenticated = !!localStorage.getItem('authToken');
 
-  // Verificación específica para /listarcomponentes
-  if (to.path === '/listarcomponentes' && !isAuthenticated) {
-    next('/login');
-  } else if (requiresAuth && !isAuthenticated) {
+  if (requiresAuth && !isAuthenticated) {
     next('/login');
   } else {
     next();
