@@ -7,19 +7,26 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router/auto'
 import { routes } from 'vue-router/auto-routes'
+import api from '@/axiosconfig'
 
 const customRoutes = [
   {
     path: '/listarcomponentes',
     name: 'listarComponentes',
     component: () => import('@/pages/Componentes.vue'),
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, requiresValidBuyer: true},
   },
   {
     path: '/home',
     name: 'home',
     component: () => import('@/pages/HomeClient.vue'),
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, requiresValidBuyer: true},
+  },
+  {
+    path: '/homeprovider',
+    name: 'homeprovider',
+    component: () => import('@/pages/HomeProvider.vue'),
+    meta: { requiresAuth: true, requiresValidBuyer: true},
   },
 ];
 
@@ -35,9 +42,37 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const isAuthenticated = !!localStorage.getItem('authToken');
+  const requiresValidBuyer = to.matched.some(record => record.meta.requiresValidBuyer);
 
   if (requiresAuth && !isAuthenticated) {
     next('/login');
+  } else if (requiresValidBuyer) {
+    api.post('/isValidBuyer')
+      .then(response => {
+        if (response.data === 1) { // Comprueba si el usuario es comprador
+          next();
+        } else {
+          next('/plans'); // Redirige a la página de checkin
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        next('/login'); // Si falla la llamada API, redirige a login
+      });
+  } else if (to.path === '/homeprovider') {
+    // Agrega la lógica para redirigir a '/home' si el usuario es proveedor
+    api.post('/isProvider')
+      .then(response => {
+        if (response.data.isProvider) {
+          next(); // Permite acceso a '/home' si el usuario es proveedor
+        } else {
+          next('/home'); // Redirige a '/homeClient' si el usuario no es proveedor
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        next('/login'); // Si falla la llamada API, redirige a login
+      });
   } else {
     next();
   }
