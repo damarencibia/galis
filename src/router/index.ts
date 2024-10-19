@@ -15,6 +15,12 @@ const customRoutes = [
     component: () => import('@/pages/Componentes.vue'),
     meta: { requiresAuth: true },
   },
+  {
+    path: '/home',
+    name: 'home',
+    component: () => import('@/pages/HomeClient.vue'),
+    meta: { requiresAuth: true },
+  },
 ];
 
 const router = createRouter({
