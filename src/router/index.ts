@@ -13,7 +13,7 @@ const customRoutes = [
 
   {
     path: '/componentes',
-    name: 'Componentes',
+    name: 'Componentes.listar',
     component: () => import('@/pages/92751473Componentes.vue'),
     meta: { requiresAuth: true, requiresValidBuyer: true},
   },
@@ -27,6 +27,12 @@ const customRoutes = [
     path: '/homeprovider',
     name: 'homeprovider',
     component: () => import('@/pages/HomeProvider.vue'),
+    meta: { requiresAuth: true},
+  },
+  {
+    path: '/keygen',
+    name: 'keygen',
+    component: () => import('@/pages/74018291Keygen.vue'),
     meta: { requiresAuth: true},
   },
 ];
