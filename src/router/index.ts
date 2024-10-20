@@ -10,6 +10,7 @@ import { routes } from 'vue-router/auto-routes'
 import api from '@/axiosconfig'
 
 const customRoutes = [
+
   {
     path: '/listarcomponentes',
     name: 'listarComponentes',

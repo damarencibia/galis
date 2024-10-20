@@ -79,7 +79,7 @@ class="bg-green-lighten-5 text-center d-flex flex-column"
 <v-divider></v-divider>
 
 <div>
-  &copy;{{ new Date().getFullYear() }} — EICMA 306 S.U.R.L. Todos los derechos reservados
+  &copy;{{ new Date().getFullYear() }} — Update_16
 </div>
 <div class="d-flex justify-space-between mb-6 mt-5">
   <a
