@@ -174,7 +174,7 @@
 
   <v-sheet>
     <v-app-bar class="elevation-0">
-      <v-tabs v-model="tab" bg-color="green-lighten-5">
+      <v-tabs v-model="tab" bg-color="">
         <v-tab value="componentes">Componentes</v-tab>
         <v-tab value="two">Item Two</v-tab>
         <v-tab value="three">Item Three</v-tab>
