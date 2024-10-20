@@ -1,13 +1,13 @@
 <template>
   <div class="d-flex justify-center mb-6">
-    <v-card class="mx-auto mt-5 elevation-0" rounded width="400">
-      <!-- <div>
+    <v-card class="mx-auto mt-5 elevation-5" rounded width="400">
+      <div>
         <v-toolbar color="blue-grey-lighten-2">
           <v-btn class="hidden-xs-only" icon :to="'/componentes'">
             <v-icon>mdi-arrow-left</v-icon>
             <v-tooltip activator="parent" location="bottom">Volver</v-tooltip>
           </v-btn>
-          <v-btn class="hidden-xs-only" icon :to="'/home'">
+          <v-btn class="hidden-xs-only" icon :to="'/homeprovider'">
             <v-icon>mdi-home-variant-outline</v-icon>
             <v-tooltip activator="parent" location="bottom">Inicio</v-tooltip>
           </v-btn>
@@ -15,7 +15,7 @@
           <v-toolbar-title>Crear Componente</v-toolbar-title>
 
         </v-toolbar>
-      </div> -->
+      </div>
 
       <v-form ref="form" class="pa-4 pt-6" v-on:submit.prevent="guardarArticulo()">
         <v-text-field class="mb-4" v-model="articulo.nro_serie" label="Numero de serie" variant="underlined" outlined
@@ -108,7 +108,7 @@ export default {
       try {
         const response = await api.post('/componentes', this.articulo);
         // console.log(response);
-        // window.location.reload();
+
       } catch (error) {
         // console.error(error.response);
         // Actualiza el mensaje del Snackbar basado en la respuesta del error
@@ -125,9 +125,7 @@ export default {
         // Guarda el objeto articulo
         this.guardarArticulo();
 
-        // Cambia la ruta y recarga la página
-        await this.$router.replace('/componentes');
-        await this.$router.go(0);
+        this.$router.push('/componentes');
       }
     },
     reset() {

@@ -66,7 +66,7 @@
       <v-divider></v-divider>
 
       <div>
-        &copy;{{ new Date().getFullYear() }} — update_26
+        &copy;{{ new Date().getFullYear() }} — update_27
       </div>
       <div class="d-flex justify-space-between mb-6 mt-5">
         <a href="" class="text-decoration-none text-black mx-5" @click="$router.push('/')">Términos y condiciones</a>

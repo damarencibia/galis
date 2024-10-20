@@ -18,6 +18,12 @@ const customRoutes = [
     meta: { requiresAuth: true, requiresValidBuyer: true},
   },
   {
+    path: '/componentes/crearcomponente',
+    name: 'Componentes.crear',
+    component: () => import('@/pages/88520335CrearComponente.vue'),
+    meta: { requiresAuth: true, requiresValidBuyer: true},
+  },
+  {
     path: '/home',
     name: 'home',
     component: () => import('@/pages/HomeClient.vue'),

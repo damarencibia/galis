@@ -15,22 +15,15 @@
       <!-- BOTON DE NUEVO REGISTRO -->
       <div class="text-center pa-4">
         <v-dialog v-model="dialog_nuevo_registro" max-width="400" persistent>
+
           <template v-slot:activator="{ props: activatorProps }">
-            <v-btn icon class="elevation-0 text-none" variant="outlined" density="compact" color="gray" size="small"
+            <v-btn :to="'/componentes/crearcomponente'" icon class="elevation-0 text-none" variant="outlined" density="compact" color="gray" size="small"
               v-bind="activatorProps" rounded>
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </template>
-          <v-theme-provider class="pa-10" theme="light">
-            <v-card>
-              <div class="d-flex justify-space-between">
-                <v-card-title>Crear Componente</v-card-title>
-                <v-btn class="mt-3 me-2" density="compact" variant="text" @click="dialog_nuevo_registro = false"
-                  icon="mdi-close-circle-outline"></v-btn>
-              </div>
-              <CrearComponente />
-            </v-card>
-          </v-theme-provider>
+          
+            <LoadingCircular/>
         </v-dialog>
       </div>
 
@@ -325,6 +318,7 @@
 
 <script>
 import api from '@/axiosconfig'
+import LoadingCircular from './LoadingCircular.vue';
 
 export default {
   name: 'ListarArticulosPage',

@@ -15,6 +15,7 @@ declare module 'vue' {
     HomeProvider: typeof import('./src/components/HomeProvider.vue')['default']
     Keygen: typeof import('./src/components/Keygen.vue')['default']
     ListarComponentes: typeof import('./src/components/listarComponentes.vue')['default']
+    LoadingCircular: typeof import('./src/components/LoadingCircular.vue')['default']
     Login: typeof import('./src/components/Login.vue')['default']
     LoginButton: typeof import('./src/components/LoginButton.vue')['default']
     Register: typeof import('./src/components/Register.vue')['default']
