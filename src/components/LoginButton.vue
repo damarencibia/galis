@@ -82,11 +82,12 @@ export default {
     },
 
     logout() {
-      // Elimina el token de autenticación del localStorage
-      localStorage.removeItem('authToken');
       // Muestra un mensaje de alerta al usuario indicando que se cerró la sesión correctamente
       alert('Sesión cerrada con éxito');
       // Redirige al usuario a la página de inicio de sesión o a otra página adecuada
+      this.$router.push('/');
+      // Elimina el token de autenticación del localStorage
+      localStorage.removeItem('authToken');
     },
 
     getkeyes() {
