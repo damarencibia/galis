@@ -58,9 +58,8 @@
             <v-div class="text-caption text-decoration-none">
               No tienes Cuenta?
               <a
-                href=""
+                href="/register"
                 class="text-caption text-decoration-none text-blue"
-                @click="$router.push('/register')"
               >
                 Registrarse
               </a>

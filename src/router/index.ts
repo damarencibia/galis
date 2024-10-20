@@ -10,14 +10,6 @@ import { routes } from 'vue-router/auto-routes'
 import api from '@/axiosconfig'
 
 const customRoutes = [
-
-  {
-    path: '/register',
-    name: 'register',
-    component: () => import('@/pages/Register.vue'),
-    meta: { guestOnly: true }, // Solo accesible sin iniciar sesión
-  },
-
   {
     path: '/listarcomponentes',
     name: 'listarComponentes',
@@ -28,13 +20,13 @@ const customRoutes = [
     path: '/home',
     name: 'home',
     component: () => import('@/pages/HomeClient.vue'),
-    meta: { requiresAuth: true, requiresValidBuyer: true},
+    meta: { requiresAuth: true},
   },
   {
     path: '/homeprovider',
     name: 'homeprovider',
     component: () => import('@/pages/HomeProvider.vue'),
-    meta: { requiresAuth: true, requiresValidBuyer: true},
+    meta: { requiresAuth: true},
   },
 ];
 
