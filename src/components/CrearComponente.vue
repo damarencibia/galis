@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-center mb-6">
-    <v-card class="mx-auto mt-5 elevation-0"  rounded width="400">
+    <v-card class="mx-auto mt-5 elevation-0" rounded width="400">
       <!-- <div>
         <v-toolbar color="blue-grey-lighten-2">
           <v-btn class="hidden-xs-only" icon :to="'/componentes'">
@@ -108,7 +108,7 @@ export default {
       try {
         const response = await api.post('/componentes', this.articulo);
         // console.log(response);
-        window.location.reload();
+        // window.location.reload();
       } catch (error) {
         // console.error(error.response);
         // Actualiza el mensaje del Snackbar basado en la respuesta del error
@@ -124,6 +124,10 @@ export default {
       if (valid) {
         // Guarda el objeto articulo
         this.guardarArticulo();
+
+        // Cambia la ruta y recarga la página
+        await this.$router.replace('/componentes');
+        await this.$router.go(0);
       }
     },
     reset() {

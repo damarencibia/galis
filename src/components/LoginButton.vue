@@ -18,22 +18,33 @@
     <v-icon icon="mdi-account-circle-outline"></v-icon>
 
 
-    <v-menu activator="parent">
+    <!-- <v-menu activator="parent">
       <v-theme-provider class="pa-10" theme="light">
         <v-list class="elevation-1 ">
           <div class="d-flex justify-center">
             <span class="mr-2 text-none">{{ userName }}</span>
           </div>
           <v-list-item>
-            <a href="" class="text-caption text-decoration-none text-black" @click="$router.push('/home')">
-              Gestionar Planes
-            </a>
+            <v-btn class="text-caption text-none" variant="plain" @click="">Planes</v-btn>
           </v-list-item>
           <v-list-item>
             <v-btn class="text-caption text-none" variant="plain" @click="logout">Cerrar Sesión</v-btn>
           </v-list-item>
         </v-list>
       </v-theme-provider>
+    </v-menu> -->
+
+    <v-menu activator="parent">
+      <v-list class="elevation-1">
+        <v-list-title class="d-flex justify-center">{{userName}}</v-list-title>
+        <v-divider class="mx-2"></v-divider>
+        <v-list-item>
+          <v-btn class="text-caption text-none" variant="plain" @click="">Planes</v-btn>
+        </v-list-item>
+        <v-list-item>
+          <v-btn class="text-caption text-none" variant="plain" @click="logout">Cerrar Sesión</v-btn>
+        </v-list-item>
+      </v-list>
     </v-menu>
 
   </v-btn>
