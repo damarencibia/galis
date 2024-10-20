@@ -87,7 +87,6 @@ export default {
       // Muestra un mensaje de alerta al usuario indicando que se cerró la sesión correctamente
       alert('Sesión cerrada con éxito');
       // Redirige al usuario a la página de inicio de sesión o a otra página adecuada
-      this.$router.push('/');
     },
 
     getkeyes() {
