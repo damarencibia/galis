@@ -12,9 +12,9 @@ import api from '@/axiosconfig'
 const customRoutes = [
 
   {
-    path: '/listarcomponentes',
-    name: 'listarComponentes',
-    component: () => import('@/pages/Componentes.vue'),
+    path: '/componentes',
+    name: 'Componentes',
+    component: () => import('@/pages/92751473Componentes.vue'),
     meta: { requiresAuth: true, requiresValidBuyer: true},
   },
   {
