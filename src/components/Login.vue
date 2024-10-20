@@ -25,11 +25,11 @@
             Iniciar Sesión
           </v-btn>
 
-          <v-div class="text-caption  d-flex justify-center">
+          <v-div class="text-caption d-flex justify-center">
             <div class="mt-2">
               No tienes Cuenta?
             </div>
-            <v-btn class="text-caption text-none" color="blue" :to="'/register'" variant="text" >Registarse</v-btn>
+            <v-btn class="text-caption text-none" color="blue" :to="'/register'" variant="plain" >Registarse</v-btn>
           </v-div>
         </v-form>
       </v-card-text>

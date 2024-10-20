@@ -1,6 +1,6 @@
 <template>
 
-  <v-app-bar color="rgb(0,120,84)">
+  <v-app-bar class="elevation-1" color="rgb(0,120,84)">
     <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon> -->
     <div class="d-flex align-center">
       <v-img alt="Vuetify Logo" class="shrink mr-2 ms-5" contain src="@/assets/galisAppBar2.jpeg" transition="scale-transition" width="100"  />
