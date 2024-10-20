@@ -1,60 +1,79 @@
 <template>
-  <!-- <v-container fluid class="py-12 px-4 bg-green-lighten-5"></v-container> -->
-
-  <v-footer class="text-center d-flex flex-column">
-    <v-container>
-      <div class="grid-center">
-        <v-img alt="Vuetify Logo" class="shrink mr-2 ms-5 mt-5" contain src="@/assets/galisAppBar2.jpeg"
-          transition="scale-transition" width="300" style="border-radius: 5px;"/>
-      </div>
-      <v-empty-state class="mb-5" headline="Gestión de Activos y Licencias de Software"
-        text="Soluciones avanzadas para la administración y protección de infraestructura IT y licencias de software"></v-empty-state>
-
+  <v-app>
+    <v-main>
       <v-container>
-        <div class="d-flex justify-center mb-6 mt-5">
-
-          <v-btn class="text-none mb-4 mx-5 ms-5" color="rgb(0,120,84)" size="x-large" variant="flat"
-            style="width: 240px; height: 50px; font-size:0.9rem;" :to="'/homeprovider'">
-            EMPEZAR
-          </v-btn>
-          <v-btn class="text-none mb-4 mx-5 ms-5" color="rgb(0,120,84)" size="x-large" variant="outlined"
-            style="width: 240px; height: 50px; font-size:0.9rem;">
-            POR QUE NOSOTROS?
-          </v-btn>
-          <v-btn class="text-none mb-4 mx-5 ms-5" color="grey-darken-3" size="x-large" variant="flat"
-            style="width: 240px; height: 50px; font-size:0.9rem;">
-            CONTACTENOS
-          </v-btn>
-        </div>
+        <v-row>
+          <v-col cols="12" sm="6" md="4">
+            <v-img
+              alt="GALIS Logo"
+              class="shrink mr-2 ms-5 mt-5"
+              contain
+              max-height="200"
+              src="@/assets/galisAppBar2.jpeg"
+              transition="scale-transition"
+            ></v-img>
+          </v-col>
+          <v-col cols="12" sm="6" md="8">
+            <h1 class="display-2 font-weight-bold mb-4">Gestión de Activos y Licencias de Software</h1>
+            <p class="text-body-1 mb-4">Soluciones avanzadas para la administración y protección de infraestructura IT y licencias de software</p>
+            <v-card flat class="mt-6">
+              <v-card-text>
+                <v-row>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-btn
+                      color="green"
+                      variant="tonal"
+                      size="large"
+                      block
+                      :to="'/homeprovider'"
+                    >
+                      EMPEZAR
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-btn
+                      color="green"
+                      variant="outlined"
+                      size="large"
+                      block
+                    >
+                      POR QUE NOSOTROS?
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-btn
+                      color="grey-darken-3"
+                      variant="tonal"
+                      size="large"
+                      block
+                    >
+                      CONTACTENOS
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-container>
-    </v-container>
-  </v-footer>
+    </v-main>
 
+    <v-footer class="text-center d-flex flex-column">
+      <div>
+        <v-btn class="mx-4" variant="text"></v-btn>
+      </div>
 
+      <v-divider></v-divider>
 
-  <v-footer class=" text-center d-flex flex-column">
-
-
-    <div>
-      <v-btn class="mx-4" variant="text"></v-btn>
-    </div>
-
-
-
-    <v-divider></v-divider>
-
-    <div>
-      &copy;{{ new Date().getFullYear() }} — update_21
-    </div>
-    <div class="d-flex justify-space-between mb-6 mt-5">
-      <a href="" class=" text-decoration-none text-black mx-5" @click="$router.push('/')">
-        Términos y condiciones
-      </a>
-      <a href="" class=" text-decoration-none text-black me-5" @click="$router.push('/')">
-        Política de Privacidad
-      </a>
-    </div>
-  </v-footer>
+      <div>
+        &copy;{{ new Date().getFullYear() }} — update_21
+      </div>
+      <div class="d-flex justify-space-between mb-6 mt-5">
+        <a href="" class="text-decoration-none text-black mx-5" @click="$router.push('/')">Términos y condiciones</a>
+        <a href="" class="text-decoration-none text-black me-5" @click="$router.push('/')">Política de Privacidad</a>
+      </div>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
