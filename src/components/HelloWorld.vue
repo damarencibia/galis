@@ -2,20 +2,24 @@
   <v-app>
     <v-main>
       <v-container>
-        <v-row>
+        <v-row class="d-flex justify-center">
           <v-col cols="12" sm="6" md="4">
             <v-img
               alt="GALIS Logo"
               class="shrink mr-2 ms-5 mt-5"
               contain
               max-height="200"
-              src="@/assets/galisAppBar2.jpeg"
+              src="@/assets/galisHomeVariant.jpeg"
               transition="scale-transition"
+              style="border-radius: 2px;"
             ></v-img>
           </v-col>
+        </v-row>
+        <v-row class="d-flex justify-center">
+
           <v-col cols="12" sm="6" md="8">
-            <h1 class="display-2 font-weight-bold mb-4">Gestión de Activos y Licencias de Software</h1>
-            <p class="text-body-1 mb-4">Soluciones avanzadas para la administración y protección de infraestructura IT y licencias de software</p>
+            <h1 class="display-2 font-weight-bold mb-4 text-center">Gestión de Activos y Licencias de Software</h1>
+            <p class="text-body-1 mb-4 text-center">Soluciones avanzadas para la administración y protección de infraestructura IT y licencias de software</p>
             <v-card flat class="mt-6">
               <v-card-text>
                 <v-row>

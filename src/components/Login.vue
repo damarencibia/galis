@@ -21,7 +21,7 @@
             variant="outlined" @click:append-inner="visible = !visible"
             :rules="[v => !!v || 'El La contraseña es requerida']" required></v-text-field>
 
-          <v-btn class="mb-8" color="primary" size="large" variant="tonal" block type="submit">
+          <v-btn class="mb-8" color="rgb(0,120,84)" size="large" variant="tonal" block type="submit">
             Iniciar Sesión
           </v-btn>
 
