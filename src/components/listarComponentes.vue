@@ -22,7 +22,7 @@
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </template>
-          
+
             <LoadingCircular/>
         </v-dialog>
       </div>

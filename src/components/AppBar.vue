@@ -1,16 +1,14 @@
 <template>
 
-  <v-app-bar class="elevation-1" color="rgb(0,120,84)">
+  <v-app-bar class="elevation-1" color="white">
     <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon> -->
     <div class="d-flex align-center">
-      <v-img alt="Vuetify Logo" class="shrink mr-2 ms-5" contain src="@/assets/galisAppBar2.jpeg" transition="scale-transition" width="100"  />
+      <v-img alt="Vuetify Logo" class="shrink mr-2 ms-5" contain src="@/assets/logo_black.jpeg" transition="scale-transition" width="40"  />
     </div>
 
-    <v-toolbar-title>{{ title }}</v-toolbar-title>
-
-    <v-spacer></v-spacer>
-
-
+    <div>
+      <p>v1.0</p>
+    </div>
 
     <LoginButton />
   </v-app-bar>

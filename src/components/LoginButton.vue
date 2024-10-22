@@ -9,14 +9,15 @@
 
   <v-spacer></v-spacer>
 
-  <v-btn class="me-5" :to="'/login'" v-if="userName === 'Iniciar Sesión'" rounded>
-    <span class="mr-2">{{ userName }}</span>
-    <v-icon>mdi-login</v-icon>
+  <v-btn class="me-5 text-caption text-none" :to="'/login'" v-if="userName === 'Acceder'" color="#388E3C" rounded variant="flat">
+    {{ userName }}
+  </v-btn>
+  <v-btn class="me-5 text-caption text-none" :to="'/register'" v-if="userName === 'Acceder'" color="#388E3C" rounded variant="outlined">
+    Registarse
   </v-btn>
 
-  <v-btn class="me-5" v-else icon density="compact">
-    <v-icon icon="mdi-account-circle-outline"></v-icon>
-
+  <v-btn class="me-5 text-none" color="#37474F" prepend-icon="mdi-account-circle-outline" v-else density="compact" rounded>
+    {{ userName  }}
 
     <!-- <v-menu activator="parent">
       <v-theme-provider class="pa-10" theme="light">
@@ -36,8 +37,6 @@
 
     <v-menu activator="parent">
       <v-list class="elevation-1">
-        <v-list-title class="d-flex justify-center">{{userName}}</v-list-title>
-        <v-divider class="mx-2"></v-divider>
         <v-list-item>
           <v-btn class="text-caption text-none" variant="plain" @click="">Planes</v-btn>
         </v-list-item>
@@ -61,7 +60,7 @@ export default {
   props: ['title'],
 
   data: () => ({
-    userName: "Iniciar Sesión",
+    userName: "Acceder",
     keyes: [],
     keys2: [],
   }),

@@ -6,7 +6,7 @@
           <v-col cols="12" sm="6" md="4">
             <v-img
               alt="GALIS Logo"
-              class="shrink mr-2 ms-5 mt-5"
+              class="shrink mr-2 ms-5 mt-5 mb-5"
               contain
               max-height="200"
               src="@/assets/galisHomeVariant.jpeg"
@@ -18,40 +18,21 @@
         <v-row class="d-flex justify-center">
 
           <v-col cols="12" sm="6" md="8">
-            <h1 class="display-2 font-weight-bold mb-4 text-center">Gestión de Activos y Licencias de Software</h1>
+            <div class="text-h4 text-center mb-5">Gestión de Activos y Licencias de Software</div>
             <p class="text-body-1 mb-4 text-center">Soluciones avanzadas para la administración y protección de infraestructura IT y licencias de software</p>
             <v-card flat class="mt-6">
               <v-card-text>
                 <v-row>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col class="d-flex justify-center" >
                     <v-btn
-                      color="green"
-                      variant="tonal"
+                      color="#388E3C"
+                      variant="flat"
                       size="large"
-                      block
+                      class="text-none"
                       :to="'/homeprovider'"
+                      rounded
                     >
-                      EMPEZAR
-                    </v-btn>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-btn
-                      color="green"
-                      variant="outlined"
-                      size="large"
-                      block
-                    >
-                      POR QUE NOSOTROS?
-                    </v-btn>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-btn
-                      color="grey-darken-3"
-                      variant="tonal"
-                      size="large"
-                      block
-                    >
-                      CONTACTENOS
+                      Empezar
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -70,7 +51,10 @@
       <v-divider></v-divider>
 
       <div>
-        &copy;{{ new Date().getFullYear() }} — update_27
+        &copy;{{ new Date().getFullYear() }} — damarencibia — Todos los derechos reservados
+      </div>
+      <div>
+        Last Commit — update_29
       </div>
       <div class="d-flex justify-space-between mb-6 mt-5">
         <a href="" class="text-decoration-none text-black mx-5" @click="$router.push('/')">Términos y condiciones</a>
