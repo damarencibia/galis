@@ -72,8 +72,8 @@ export default {
   methods: {
     async register() {
       try {
-        // const response = await axios.post('https://laravel-railway-production-20f4.up.railway.app/api/register', this.user);
-        const response = await axios.post('http://127.0.0.1:8000/api/register', this.user);
+        const response = await axios.post('https://laravel-railway-production-20f4.up.railway.app/api/register', this.user);
+        // const response = await axios.post('http://127.0.0.1:8000/api/register', this.user);
         const token = response.data.token;
         localStorage.setItem('authToken', token); // Almacena el token en localStorage
         alert('Cuenta creada exitosamente.');
