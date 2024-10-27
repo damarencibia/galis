@@ -18,6 +18,12 @@ const customRoutes = [
     meta: { requiresAuth: true, requiresValidBuyer: true},
   },
   {
+    path: '/piezas',
+    name: 'Piezas.listar',
+    component: () => import('@/pages/16806827Piezas.vue'),
+    meta: { requiresAuth: true, requiresValidBuyer: true},
+  },
+  {
     path: '/componentes/crearcomponente',
     name: 'Componentes.crear',
     component: () => import('@/pages/88520335CrearComponente.vue'),

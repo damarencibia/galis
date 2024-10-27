@@ -15,6 +15,8 @@ declare module 'vue' {
     HomeProvider: typeof import('./src/components/HomeProvider.vue')['default']
     Keygen: typeof import('./src/components/Keygen.vue')['default']
     ListarComponentes: typeof import('./src/components/listarComponentes.vue')['default']
+    ListarComponentesNew: typeof import('./src/components/ListarComponentesNew.vue')['default']
+    ListarPiezas: typeof import('./src/components/ListarPiezas.vue')['default']
     LoadingCircular: typeof import('./src/components/LoadingCircular.vue')['default']
     Login: typeof import('./src/components/Login.vue')['default']
     LoginButton: typeof import('./src/components/LoginButton.vue')['default']
@@ -22,5 +24,6 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SideBar: typeof import('./src/components/SideBar.vue')['default']
+    SideBarPiezas: typeof import('./src/components/Piezas/SideBarPiezas.vue')['default']
   }
 }
