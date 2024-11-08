@@ -1,49 +1,69 @@
 <template>
-  <div class="d-flex justify-center mb-6">
-    <v-card class="mx-auto mt-5 elevation-5" rounded width="400">
-      <div>
-        <v-toolbar color="blue-grey-lighten-2">
-          <v-btn class="hidden-xs-only" icon :to="'/componentes'">
-            <v-icon>mdi-arrow-left</v-icon>
-            <v-tooltip activator="parent" location="bottom">Volver</v-tooltip>
-          </v-btn>
-          <v-btn class="hidden-xs-only" icon :to="'/homeprovider'">
-            <v-icon>mdi-home-variant-outline</v-icon>
-            <v-tooltip activator="parent" location="bottom">Inicio</v-tooltip>
-          </v-btn>
+  <div>
+    <v-dialog
+      v-model="dialog"
+      transition="dialog-bottom-transition"
+      fullscreen
+    >
+      <template v-slot:activator="{ props: activatorProps }">
+        <v-btn class="text-none flex-grow-1" height="38" variant="flat" color="#1E88E5"
+          style="border-radius:8px; font-size:0.8rem;" width="220" prepend-icon="mdi-plus" v-bind="activatorProps">Nuevo Componente</v-btn>
 
-          <v-toolbar-title>Crear Componente</v-toolbar-title>
+      </template>
 
+      <v-card>
+        <v-toolbar>
+          <v-btn
+            icon="mdi-close"
+            @click="dialog = false"
+          ></v-btn>
+
+          <v-toolbar-title>Nuevo Componente</v-toolbar-title>
+
+          <v-spacer></v-spacer>
+
+          <v-toolbar-items>
+            <v-btn
+              text="Guardar"
+              variant="text"
+              @click="dialog = false"
+            ></v-btn>
+          </v-toolbar-items>
         </v-toolbar>
-      </div>
 
-      <v-form ref="form" class="pa-4 pt-6" v-on:submit.prevent="guardarArticulo()">
-        <v-text-field class="mb-4" v-model="articulo.nro_serie" label="Numero de serie" variant="underlined" outlined
-          required :counter="50" :rules="numeroSerieRules">
-        </v-text-field>
 
-        <v-text-field class="mb-4" v-model="articulo.marca" label="Marca" variant="underlined" outlined required
-          :counter="50" :rules="marcaRules"></v-text-field>
+        <v-form ref="form" class="pa-4 pt-6" v-on:submit.prevent="guardarArticulo()" >
+          <v-text-field class="mb-4" v-model="articulo.nro_serie" label="Numero de serie" variant="underlined" outlined
+            required :counter="50" :rules="numeroSerieRules">
+          </v-text-field>
 
-        <v-select variant="underlined" class="mb-4" v-model="articulo.tipo_componente" :items="items"
-          :rules="[v => !!v || 'Componente es requerido']" label="Tipo de componente" required></v-select>
+          <v-text-field class="mb-4" v-model="articulo.marca" label="Marca" variant="underlined" outlined required
+            :counter="50" :rules="marcaRules"></v-text-field>
 
-        <v-checkbox v-model="checkbox" :rules="[v => !!v || ' Debe confirmar para continuar!']"
-          label="Confirmar formulario" required></v-checkbox>
+          <v-select variant="underlined" class="mb-4" v-model="articulo.tipo_componente" :items="items"
+            :rules="[v => !!v || 'Componente es requerido']" label="Tipo de componente" required></v-select>
 
-        <div class="d-flex justify-center mb-6 mt-2">
-          <v-btn prepend-icon="mdi-restore" class="text-none mx-4" color="error" min-width="92" variant="outlined"
-            @click="reset" size="small">
-            Reiniciar
-          </v-btn>
-          <v-btn prepend-icon="mdi-check" class="text-none" color="success" min-width="92" variant="outlined"
-            @click="validate" size="small">
-            Validar
-          </v-btn>
-        </div>
-      </v-form>
-    </v-card>
+          <v-checkbox v-model="checkbox" :rules="[v => !!v || ' Debe confirmar para continuar!']"
+            label="Confirmar formulario" required></v-checkbox>
+
+          <div class="d-flex justify-center mb-6 mt-2">
+            <v-btn prepend-icon="mdi-restore" class="text-none mx-4" color="error" min-width="92" variant="outlined"
+              @click="reset" size="small">
+              Reiniciar
+            </v-btn>
+            <v-btn prepend-icon="mdi-check" class="text-none" color="success" min-width="92" variant="outlined"
+              @click="validate" size="small">
+              Validar
+            </v-btn>
+          </div>
+        </v-form>
+
+      </v-card>
+    </v-dialog>
   </div>
+
+
+
 
   <v-snackbar v-model="snackbar" color="white" :timeout="4000" top right>
     <v-container>
@@ -72,6 +92,8 @@ import api from '@/axiosconfig';
 export default {
   data() {
     return {
+      dialog: false,
+
       // inicio componentes del snackbar
       snackbar: false,
       snackbarMessage: null,
@@ -107,6 +129,8 @@ export default {
     async guardarArticulo() {
       try {
         const response = await api.post('/componentes', this.articulo);
+        api.get('/componentes');
+        this.dialog = false;
         // console.log(response);
 
       } catch (error) {
@@ -119,18 +143,16 @@ export default {
     },
 
     async validate() {
-      const { valid } = await this.$refs.form.validate();
+    const { valid } = await this.$refs.form.validate();
 
-      if (valid) {
-        // Guarda el objeto articulo
-        this.guardarArticulo();
-
-        this.$router.push('/componentes');
-      }
-    },
-    reset() {
+    if (valid) {
+      // Guarda el objeto articulo
+      this.guardarArticulo();
+      this.$emit('component-created', this.articulo);
       this.$refs.form.reset()
-    },
+      this.dialog = false;
+    }
+  },
   }
 }
 </script>

@@ -2,8 +2,10 @@
   <v-navigation-drawer floating v-model="drawer" width="230" permanent color="#ECEFF1" theme="light">
     <v-list class="text-center mt-5" density="compact" nav>
       <v-list-item>
-        <v-btn class="text-none flex-grow-1" height="38" variant="flat" color="#1E88E5"
-          style="border-radius:8px; font-size:0.8rem;" width="220" prepend-icon="mdi-plus">Nuevo Componente</v-btn>
+
+        <CrearComponente @component-created="onComponentCreated" />
+
+
       </v-list-item>
       <v-list-item>
         <v-btn class="text-none flex-grow-1" height="38" variant="flat" color="#1E88E5"
@@ -116,163 +118,153 @@
           </template>
         </v-app-bar>
 
+        <!-- 🛸CARD DE CONTENEDOR DE ARTICULOS -->
+        <v-card class="elevation-1">
+          <v-data-iterator :items="articulos" :items-per-page="4" :search="search">
 
-        <v-card-text>
-          <!-- DATA TABLE -->
-          <v-card variant="text">
-            <v-data-table loading-text="Cargando..." :loading="isLoading" class="elevation-0  table-hover-effect"
-              fixed-header v-model:page="page" :headers="headers" :items="articulos" :search="search" density="compact"
-              :items-per-page="itemsPerPage" style="font-size:0.9rem;">
+            <template v-slot:default="{ items }">
+              <v-container class="pa-2" fluid>
+                <v-row dense>
+                  <v-col v-for="item in items" :key="item.raw.id" cols="auto">
+                    <v-card class="pb-3" border flat width="200">
 
-              <template v-slot:loading>
-                <v-skeleton-loader type="table-row@10" color="green-lighten-5"></v-skeleton-loader>
-              </template>
+                      <div class="d-flex justify-space-between px-4 mt-4">
+                        <div class="d-flex align-center text-caption text-medium-emphasis me-1">
+                          <v-icon v-if="item.raw.tipo_componente === 'placa_base'" icon="mdi-clock" start></v-icon>
+                          <v-icon v-if="item.raw.tipo_componente === 'memoria_ram'" icon="mdi-plus" start></v-icon>
+                          <v-icon v-if="item.raw.tipo_componente === 'lector_cd'" icon="mdi-clock" start></v-icon>
+                          <v-icon v-if="item.raw.tipo_componente === 'disco_duro'" icon="mdi-clock" start></v-icon>
+                        </div>
 
-              <!-- <template v-slot:top></template> -->
+                        <div class="text-center">
+                          <v-menu>
+                            <template v-slot:activator="{ props }">
+                              <v-btn class="text-none" size="small" icon border rounded flat density="comfortable"
+                                v-bind="props">
+                                <v-icon>mdi-dots-horizontal</v-icon>
+                              </v-btn>
+                            </template>
 
-              <!-- Filas del data table -->
-              <template v-slot:item="{ item, index }">
-                <tr>
-                  <td>
-                    <v-text-field class="mt-5  font-weight-bold" variant="text" color="green-lighten-1"
-                      v-model="item.nro_serie" :readonly="isReadOnly" required width="200"
-                      density="compact"></v-text-field>
-                  </td>
+                            <v-list>
+                              <v-list-item>
+                                <!-- BOTON EDITAR -->
+                                <v-btn variant="tonal" class="mx-1" density="comfortable"
+                                  @click="updateArticulo(item.id, item.nro_serie, item.marca, item.tipo_componente)"
+                                  icon size="small">
+                                  <v-icon>mdi-cog</v-icon>
+                                  <v-tooltip activator="parent" location="bottom">Editar {{ item.nro_serie
+                                    }}</v-tooltip>
+                                </v-btn>
+                              </v-list-item>
 
-                  <td>
-                    <v-text-field class="mt-5" variant="text" color="green-lighten-1" v-model="item.marca"
-                      :readonly="isReadOnly" required width="200" density="compact"></v-text-field>
-                  </td>
+                              <v-list-item>
+                                <!-- BOTON ELIMINAR -->
+                                <v-btn variant="tonal" density="comfortable"
+                                  @click.stop="dialog = true; id = item.raw.id" icon size="small">
+                                  <v-icon>mdi-trash-can</v-icon>
+                                  <v-tooltip activator="parent" location="bottom">Eliminar {{ item.nro_serie
+                                    }}</v-tooltip>
+                                </v-btn>
+                              </v-list-item>
+                            </v-list>
+                          </v-menu>
+                        </div>
+                      </div>
 
-                  <td>
-                    <v-select variant="text" density="compact" class="mt-5" v-model="item.tipo_componente"
-                      :items="tipos_de_componentes" :rules="[v => !!v || 'Componente es requerido']" width="150"
-                      required :readonly="isReadOnly"></v-select>
+                      <v-list-item>
+                        {{ item.raw.nro_serie.length > 17 ? item.raw.nro_serie.slice(0, 17) + '...' : item.raw.nro_serie }}
+                      </v-list-item>
+                      <v-list-item>
+                        {{ item.raw.marca }}
+                      </v-list-item>
+                      <v-list-item>
+                        {{ item.raw.tipo_componente }}
+                      </v-list-item>
+                      <v-list-item>
+                        {{ item.raw.disponible }}
+                      </v-list-item>
 
-                  </td>
-                  <td>
-                    <v-chip variant="flat" size="small" :color="item.disponible ? 'rgb(0,120,84)' : 'rgb(158,38,41)'"
-                      style="font-size: 0.7rem;">
-                      {{ item.disponible ? 'Si' : 'No' }}
-                    </v-chip>
-                  </td>
-                  <td>{{ new Date(item.created_at).toLocaleString() }}</td>
-                  <td>{{ new Date(item.updated_at).toLocaleString() }}</td>
-                  <td>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </template>
 
-                    <!-- BOTON EDITAR -->
-                    <v-btn variant="tonal" class="mx-1" density="comfortable"
-                      @click="updateArticulo(item.id, item.nro_serie, item.marca, item.tipo_componente)" icon
-                      size="small">
-                      <v-icon>mdi-cog</v-icon>
-                      <v-tooltip activator="parent" location="bottom">Editar {{ item.nro_serie }}</v-tooltip>
-                    </v-btn>
+            <template v-slot:footer="{ page, pageCount, prevPage, nextPage }">
+              <div class="d-flex align-center justify-center pa-4">
+                <v-btn :disabled="page === 1" density="comfortable" icon="mdi-arrow-left" variant="tonal" rounded
+                  @click="prevPage"></v-btn>
 
+                <div class="mx-2 text-caption">
+                  Page {{ page }} of {{ pageCount }}
+                </div>
 
+                <v-btn :disabled="page >= pageCount" density="comfortable" icon="mdi-arrow-right" variant="tonal"
+                  rounded @click="nextPage"></v-btn>
+              </div>
+            </template>
+          </v-data-iterator>
+        </v-card>
 
-                    <!-- BOTON ELIMINAR -->
-                    <v-btn variant="tonal" density="comfortable" @click.stop="dialog = true; id = item.id" icon
-                      size="small">
-                      <v-icon>mdi-trash-can</v-icon>
-                      <v-tooltip activator="parent" location="bottom">Eliminar {{ item.nro_serie }}</v-tooltip>
-                    </v-btn>
-                  </td>
-                </tr>
-
-              </template>
-
-
-              <template v-slot:bottom></template>
-
-            </v-data-table>
-
-
-            <!-- ventana de dialogo para eliminar registros -->
-            <v-dialog v-model="dialog" max-width="300">
-              <v-card>
-                <v-card-title class="headline text-center">
-                  <div>
-                    <v-icon color="red">mdi-delete-forever-outline</v-icon>
-                  </div>
-                  <div>
-                    ¿Borrar?
-                  </div>
-                  <div style="font-size: 0.8rem;">
-                    Esta acción es irreversible
-                  </div>
-                </v-card-title>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn @click="dialog = false" variant="outlined" class="elevation-0"
-                    size="small"><v-icon>mdi-close</v-icon>
-                    Cancelar</v-btn>
-                  <v-btn @click="confirmarBorrado(id)" class="elevation-0" variant="elevated" color="red" size="small">
-                    <v-icon>mdi-delete-forever-outline</v-icon>
-                    Aceptar</v-btn>
-                  <v-spacer></v-spacer>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-
-            <v-snackbar v-model="snackbar" color="white" multi-line>
-              {{ textsnack }}
-              <template v-slot:actions>
-                <v-btn color="blue" variant="text" @click="snackbar = false">
-                  Cerrar
-                </v-btn>
-              </template>
-            </v-snackbar>
-
-          </v-card>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-btn color="orange" text="Share"></v-btn>
-
-          <v-btn color="orange" text="Explore"></v-btn>
-        </v-card-actions>
       </v-card>
 
     </v-row>
 
-
-
-
-
+    <!-- ventana de dialogo para eliminar registros -->
+    <v-dialog v-model="dialog" max-width="300">
+      <v-card>
+        <v-card-title class="headline text-center">
+          <div>
+            <v-icon color="red">mdi-delete-forever-outline</v-icon>
+          </div>
+          <div>
+            ¿Borrar?
+          </div>
+          <div style="font-size: 0.8rem;">
+            Esta acción es irreversible
+          </div>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn @click="dialog = false" variant="outlined" class="elevation-0" size="small"><v-icon>mdi-close</v-icon>
+            Cancelar</v-btn>
+          <v-btn @click="confirmarBorrado(id)" class="elevation-0" variant="elevated" color="red" size="small">
+            <v-icon>mdi-delete-forever-outline</v-icon>
+            Aceptar</v-btn>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
   </v-app>
 
 
 </template>
 
-<style scoped>
-.even-row {
-  background-color: #DEF9C4;
-  /* Color de fondo para filas pares */
-}
-
-.odd-row {
-  background-color: #9CDBA6;
-  /* Color de fondo para filas impares */
-}
-
-.custom-progress-circular {
-  margin: 1rem;
-}
-</style>
-
 <script>
 import api from '@/axiosconfig'
 import LoadingCircular from './LoadingCircular.vue';
+import CrearComponente from './CrearComponente.vue';
 
 export default {
-  name: 'ListarArticulosPage',
+  name: 'ListarPiezas',
   data() {
     return {
+
       drawer: true,
       dialog: false,
       dialog_nuevo_registro: false,
-      articulos: [],
+      articulos: [
+        {
+          nro_serie: "",
+          marca: "",
+          tipo_componente: "",
+          disponible: "",
+          created_at: "",
+          updated_at: ""
+        }
+
+      ],
       id: null,
       search: '',
       snackbar: false,
@@ -355,6 +347,12 @@ export default {
     },
   },
   methods: {
+
+    testFunction(id) {
+      console.log(id);
+    },
+
+
     toggleAllFields() {
       this.isReadOnly = !this.isReadOnly;
       // console.log('Toggling all fields:', this.isReadOnly);
@@ -379,6 +377,12 @@ export default {
           this.isLoading = false;
         })
         .catch(error => console.error(error));
+    },
+
+    onComponentCreated(newArticulo) {
+      console.log('Nuevo componente creado:', newArticulo);
+      // Aquí puedes agregar la lógica para actualizar los datos del componente padre
+      this.obtenerArticulos();
     },
 
     async updateArticulo(id, nro_serie, marca, tipo_componente) {
