@@ -21,9 +21,12 @@
             variant="outlined" @click:append-inner="visible = !visible"
             :rules="[v => !!v || 'El La contraseña es requerida']" required></v-text-field>
 
-          <v-btn class="mb-8" color="#388E3C" size="large" variant="tonal" block type="submit" rounded>
+
+          <v-btn class="mb-8" color="#388E3C" size="large" variant="tonal" block type="submit" rounded :loading="loading">
             Iniciar Sesión
           </v-btn>
+
+
 
           <v-div class="text-caption d-flex justify-center">
             <div class="mt-2">
@@ -49,18 +52,22 @@ export default {
         password: '',
       },
       visible: false,
+      loading: false,
     };
   },
   methods: {
     async login() {
+      this.loading = true;
       try {
         const response = await axios.post('https://laravel-railway-production-20f4.up.railway.app/api/login', this.user);
         // const response = await axios.post('http://127.0.0.1:8000/api/login', this.user);
         const token = response.data.token;
         localStorage.setItem('authToken', token); // Almacena el token en localStorage
-        alert('Inicio de sesión exitoso');
+        this.loading = false;
+        alert('Inicio de sesión exitoso. Será redirigido en unos segundos...');
         this.$router.push('/homeprovider');
       } catch (error) {
+        this.loading = false;
         alert('Credenciales incorrectas');
       }
     },
@@ -73,9 +80,11 @@ export default {
       // Redirige al usuario a la página de inicio de sesión o a otra página adecuada
       this.$router.push('/');
     },
+
     toggleShowPassword() {
       this.showPassword = !this.showPassword;
-    }
+    },
+
   },
 };
 </script>
