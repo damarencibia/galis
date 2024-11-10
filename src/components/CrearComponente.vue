@@ -6,7 +6,7 @@
       fullscreen
     >
       <template v-slot:activator="{ props: activatorProps }">
-        <v-btn class="text-none flex-grow-1" height="38" variant="flat" color="#1E88E5"
+        <v-btn class="text-none flex-grow-1" height="38" variant="flat" color="#3498db "
           style="border-radius:8px; font-size:0.8rem;" width="220" prepend-icon="mdi-plus" v-bind="activatorProps">Nuevo Componente</v-btn>
 
       </template>

@@ -3,7 +3,6 @@
  *
  * Framework documentation: https://vuetifyjs.com`
  */
-
 // Styles
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
@@ -11,6 +10,16 @@ import 'vuetify/styles'
 // Composables
 import { createVuetify } from 'vuetify'
 
+/*
+Paleta 1: Clásica y Profesional
+Esta paleta combina colores neutrales con tonos de azul, creando un ambiente profesional y confiable.
+
+Primario: #3498db (Azul cielo)
+Secundario: #2980b9 (Azul oscuro)
+Terciario: #ecf0f1 (Blanco grisáceo)
+Texto: #34495e (Gris oscuro)
+Fondo: #ecf0f1 (Blanco grisáceo)
+*/
 const backgroundTheme = {
   dark: false,
   colors: {

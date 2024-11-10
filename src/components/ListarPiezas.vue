@@ -8,10 +8,11 @@
 
       </v-list-item>
       <v-list-item>
-        <v-btn class="text-none flex-grow-1" height="38" variant="flat" color="#1E88E5"
+        <v-btn class="text-none flex-grow-1" height="38" variant="flat" color="#3498db "
           style="border-radius:8px; font-size:0.8rem;" width="220" prepend-icon="mdi-history">Historial</v-btn>
       </v-list-item>
 
+      <!--🛸 Estadisticas -->
       <v-card class="mt-3" theme="light" variant="flat" style="border-radius:8px;">
         <!-- TOTAL DE COMPONENTES -->
         <v-list>
@@ -45,58 +46,40 @@
             </template>
           </v-list-item>
 
-          <v-divider></v-divider>
 
-          <!-- CONTADOR DE  PLACA BASE-->
-          <v-list-item>
-            <div style="font-size:0.8rem;">PLaca base</div>
-            <template v-slot:append>
-              <v-badge color="#CFD8DC" :content="placaBaseCount" inline> </v-badge>
-            </template>
-          </v-list-item>
 
-          <!-- CONTADOR DE LECTOR CD-->
-          <v-list-item>
-            <div style="font-size:0.8rem;">Lector CD</div>
-            <template v-slot:append>
-              <v-badge color="#CFD8DC" :content="lectorCdCount" inline> </v-badge>
-            </template>
-          </v-list-item>
-
-          <!-- CONTADOR DE MEMORIA RAM -->
-          <v-list-item>
-            <div style="font-size:0.8rem;">RAM</div>
-            <template v-slot:append>
-              <v-badge color="#CFD8DC" :content="memoriaRamCount" inline> </v-badge>
-            </template>
-          </v-list-item>
-
-          <!-- CONTADOR DE DISCO DURO  -->
-          <v-list-item>
-            <div style="font-size:0.8rem;">Disco duro</div>
-            <template v-slot:append>
-              <v-badge color="#CFD8DC" :content="discoDuroCount" inline> </v-badge>
-            </template>
-          </v-list-item>
         </v-list>
       </v-card>
 
     </v-list>
 
   </v-navigation-drawer>
+
+  <v-navigation-drawer floating width="50" permanent color="#ECEFF1" theme="light">
+
+    <v-btn class="ms-3" density="compact" icon variant="text" @click="closeDrawer" v-if="drawer === true"
+      style="margin-top: 50vh"><v-icon color="#2980b9 " size="large">mdi-chevron-left</v-icon></v-btn>
+    <v-btn class="ms-3" density="compact" icon variant="text" @click="openDrawer" v-if="drawer === false"
+      style="margin-top: 50vh"><v-icon color="#2980b9 " size="large">mdi-chevron-right</v-icon></v-btn>
+
+  </v-navigation-drawer>
+
+
+
   <v-app theme="backgroundTheme">
 
-    <v-row class="mt-2 mb-2" no-gutters>
-      <v-card theme="light" class="elevation-4 me-2 ms-5" style="border-radius: 15px;
+
+    <v-row class="mt-2" no-gutters>
+      <v-card theme="light" class="elevation-4 me-2 ms-2" style="border-radius: 15px;
          overflow-y: auto;
          scrollbar-width: none;" height="97vh" width="100%">
 
+        <!-- 🛸 BUSCADOR DE TABLA -->
         <v-app-bar class="elevation-2 position-sticky" density="comfortable">
-          <v-spacer></v-spacer>
-          <!-- BUSCADOR DE TABLA -->
-          <v-btn class="text-none" variant="outlined" :ripple="false" color="#CFD8DC" height="40"
+
+          <v-btn class="text-none ms-5" variant="outlined" :ripple="false" color="#CFD8DC" height="40"
             style="border-radius: 8px;">
-            <v-icon color="#263238" size="large">mdi-magnify</v-icon>
+            <v-icon color="#2980b9 " size="large">mdi-magnify</v-icon>
             <v-text-field class="text-grey-darken-4" density v-model="search" label="Buscar un componente"
               variant="text" hide-details single-line clearable width="300px" :bordered="false">
               <v-tooltip activator="parent" location="bottom">Evitar espacios en blanco
@@ -116,56 +99,63 @@
         </v-app-bar>
 
         <!-- 🛸 DATA ITERATOR  -->
-        <v-data-iterator :items="articulos" :items-per-page="itemsPerPage" class="mt-2">
+        <v-data-iterator :items="articulos" :items-per-page="itemsPerPage" class="mt-2" :loading="loadingItemIterator"
+          :search="search">
           <template v-slot:header="{ page, pageCount, prevPage, nextPage }">
-            <h1 class="text-h4 font-weight-bold d-flex justify-space-between align-center">
-              <div class="text-h4 mx-4 text-blue-grey-darken-4">
-                Componentes del Chasis
-              </div>
+            <h1 class="text-h4 font-weight-bold d-flex  justify-space-between mb-2">
 
-              <div class="d-flex align-center mx-4">
-                <v-btn class="me-8" variant="text" @click="onClickSeeAll" color="#607D8B" style="border-radius: 8px;">
-                  <span class="text-decoration-underline text-none text-blue-grey-darken-4">Ver todo</span>
+              <v-sheet class="px-1">
+                <v-chip-group v-model="defaultSelection" mandatory filter class="custom-chip-group"
+                  :show-arrows="false">
+                  <v-chip class="custom-chip" @click="obtenerArticulos" value="Todo">Todos</v-chip>
+                  <v-chip class="custom-chip" @click="obtenerAvalilable" value="Disponible">Disponible</v-chip>
+                  <v-chip class="custom-chip" @click="obtenerUnavalilable" value="Vinculados">Vinculados</v-chip>
+                  <v-chip class="custom-chip" @click="obtenerAllPlacaBase" value="Placa Madre">Placa Madre</v-chip>
+                  <v-chip class="custom-chip" @click="obtenerAllRam" value="RAM">RAM</v-chip>
+                  <v-chip class="custom-chip" @click="obtenerAllDiscoDuro" value="Disco duro">Disco duro</v-chip>
+                  <v-chip class="custom-chip" @click="obtenerAllLectorCd" value="Lector CD">Lector CD</v-chip>
+                </v-chip-group>
+              </v-sheet>
+
+              <div class="d-flex align-center mx-1">
+                <v-btn class="me-8 text-none" variant="tonal" rounded @click="onClickSeeAll" color="#3498db"
+                  size="small" style="font-size: 0.7rem;">
+                  Ver todo
                 </v-btn>
 
                 <div class="d-inline-flex">
-                  <v-btn color="#1E88E5" :disabled="page === 1" class="me-2" icon="mdi-chevron-left" size="small"
-                    variant="tonal" @click="prevPage"></v-btn>
+                  <v-btn color="#2980b9 " :disabled="page === 1" class="me-2" icon="mdi-chevron-left" size="x-small"
+                    variant="tonal" @click="prevPage" style="border-radius: 8px;"></v-btn>
 
-                  <v-btn color="#1E88E5" :disabled="page === pageCount" icon="mdi-chevron-right" size="small"
-                    variant="tonal" @click="nextPage"></v-btn>
+                  <v-btn color="#2980b9 " :disabled="page === pageCount" icon="mdi-chevron-right" size="x-small"
+                    variant="tonal" @click="nextPage" style="border-radius: 8px;"></v-btn>
                 </div>
               </div>
             </h1>
-            <div class="d-flex justify-center mb-4">
-              <v-btn icon size="comfortable" variant="text" density="comfortable"
-              :loading="loading" @click="obtenerArticulos" color="#B0BEC5">
-              <v-icon>mdi-reload</v-icon>
-            </v-btn>
-            </div>
           </template>
 
           <template v-slot:default="{ items }">
-            <v-row class="mx-1">
+            <v-row>
               <v-col v-for="(item, i) in items" :key="i" cols="12" sm="6" xl="3">
-                <v-sheet border style="border-radius: 8px;">
+                <v-sheet class="mx-1" border style="border-radius: 8px;">
 
                   <!-- HEADER PARA DISCO DURO -->
                   <v-img v-if="item.raw.tipo_componente === 'disco_duro'"
-                    :gradient="`to top right, rgba(255, 255, 255, .1), rgba(12, 146, 47, .10)`" contain max-height="150"
+                    :gradient="`to top right, rgba(255, 255, 255, .1), rgba(12, 146, 47, .10)`" contain max-height="100"
                     src="@/assets/hdd.jpg" style="border-radius: 8px;"></v-img>
                   <v-list-item v-if="item.raw.tipo_componente === 'disco_duro'" density="comfortable" lines="two">
                     <template v-slot:title>
                       <strong class="text-h6">
                         Disco duro
                       </strong>
+                      <div></div>
                     </template>
                   </v-list-item>
 
                   <!-- HEADER PARA MEMORIA RAM  -->
                   <v-img v-if="item.raw.tipo_componente === 'memoria_ram'"
                     :gradient="`to top right, rgba(255, 255, 255, .1), rgba(166, 39, 222, .10)`" contain
-                    max-height="150" src="@/assets/ram.jpg" style="border-radius: 8px;"></v-img>
+                    max-height="100" src="@/assets/ram.jpg" style="border-radius: 8px;"></v-img>
                   <v-list-item v-if="item.raw.tipo_componente === 'memoria_ram'" density="comfortable" lines="two">
                     <template v-slot:title>
                       <strong class="text-h6">
@@ -177,11 +167,11 @@
                   <!-- HEADER PARA PLACA MADRE   -->
                   <v-img v-if="item.raw.tipo_componente === 'placa_base'"
                     :gradient="`to top right, rgba(255, 255, 255, .1), rgba(228, 196, 69, .10)`" contain
-                    max-height="150" src="@/assets/placa_madre.jpg" style="border-radius: 8px;"></v-img>
+                    max-height="100" src="@/assets/placa_madre.jpg" style="border-radius: 8px;"></v-img>
                   <v-list-item v-if="item.raw.tipo_componente === 'placa_base'" density="comfortable" lines="two">
                     <template v-slot:title>
                       <strong class="text-h6">
-                        PLaca madre
+                        Placa madre
                       </strong>
                     </template>
                   </v-list-item>
@@ -189,11 +179,11 @@
                   <!-- HEADER PARA LECTOR CD   -->
                   <v-img v-if="item.raw.tipo_componente === 'lector_cd'"
                     :gradient="`to top right, rgba(255, 255, 255, .1), rgba(156, 82, 251, .10)`" contain
-                    max-height="150" src="@/assets/lector_cd.jpg" style="border-radius: 8px;"></v-img>
+                    max-height="100" src="@/assets/lector_cd.jpg" style="border-radius: 8px;"></v-img>
                   <v-list-item v-if="item.raw.tipo_componente === 'lector_cd'" density="comfortable" lines="two">
                     <template v-slot:title>
                       <strong class="text-h6">
-                        PLaca madre
+                        Lector CD
                       </strong>
                     </template>
                   </v-list-item>
@@ -206,7 +196,9 @@
                       <tr align="right">
                         <th>Serial:</th>
 
-                        <td>{{ item.raw.nro_serie }}</td>
+                        <td>{{ item.raw.nro_serie.length > 30 ? item.raw.nro_serie.slice(0, 30) + '...' :
+                          item.raw.nro_serie
+                          }}</td>
                       </tr>
 
                       <tr align="right">
@@ -241,13 +233,14 @@
                     </tbody>
                   </v-table>
 
+
+
                   <!-- 🚓 MENU DE ACCIONES -->
                   <div class="text-end mx-2">
-                    <v-menu >
+                    <v-menu>
                       <template v-slot:activator="{ props }">
-                        <v-btn class="text-none mb-1"  icon  rounded flat density="comfortable"
-                          v-bind="props">
-                          <v-icon color="#607D8B" >mdi-dots-horizontal</v-icon>
+                        <v-btn class="text-none mb-1" icon rounded flat density="comfortable" v-bind="props">
+                          <v-icon color="#34495e">mdi-dots-horizontal</v-icon>
                         </v-btn>
                       </template>
 
@@ -255,8 +248,8 @@
                         <v-list-item>
                           <!-- BOTON EDITAR -->
                           <v-btn variant="text" class="mx-1" density="comfortable"
-                            @click="updateArticulo(item.id, item.nro_serie, item.marca, item.tipo_componente)" prepend-icon="mdi-cog-outline"
-                            size="small" rounded>
+                            @click="updateArticulo(item.id, item.nro_serie, item.marca, item.tipo_componente)"
+                            prepend-icon="mdi-cog-outline" size="small" rounded>
                             Editar
                             <v-tooltip activator="parent" location="bottom">Editar {{ item.nro_serie
                               }}</v-tooltip>
@@ -281,21 +274,37 @@
             </v-row>
           </template>
 
-          <template v-slot:footer="{ page, pageCount }">
-            <v-footer class="justify-space-between text-body-2 mt-4" color="surface-variant">
 
-              <div>
-                Page {{ page }} of {{ pageCount }}
-              </div>
-            </v-footer>
+
+          <template v-slot:footer="{ page, pageCount }">
+            <v-empty-state v-if="totalRegistros === 0" class="text-blue-grey-darken-1" icon="mdi-magnify"
+              title="No se encontraron registros" color="#34495e" </v-empty-state>
+
+              <v-footer class="justify-space-between text-body-2 mt-4">
+
+                <div>
+                  Page {{ page }} of {{ pageCount }}
+                </div>
+              </v-footer>
+          </template>
+
+          <template v-slot:loader>
+            <v-row>
+
+              <v-col v-for="(_, k) in [0, 1, 2]" :key="k" cols="12" sm="6" xl="3">
+                <v-skeleton-loader class="border mx-1" type="image, article"></v-skeleton-loader>
+              </v-col>
+            </v-row>
           </template>
         </v-data-iterator>
+
+
 
       </v-card>
 
     </v-row>
 
-    <!-- ventana de dialogo para eliminar registros -->
+    <!--🛸 ventana de dialogo para eliminar registros -->
     <v-dialog v-model="dialog" max-width="300" theme="light">
       <v-card>
         <v-card-title class="headline text-center">
@@ -378,9 +387,9 @@ export default {
       isReadOnly: true,
       tab: null,
       loading: false,
-      // // // // // // // // // // // //
+      loadingItemIterator: true,
       itemsPerPage: 4,
-
+      defaultSelection: 'Todo',
 
     };
   },
@@ -439,16 +448,6 @@ export default {
     },
   },
   methods: {
-
-    onClickSeeAll() {
-      this.itemsPerPage = this.itemsPerPage === 4 ? this.articulos.length : 4
-    },
-
-    toggleAllFields() {
-      this.isReadOnly = !this.isReadOnly;
-      // console.log('Toggling all fields:', this.isReadOnly);
-    },
-
     obtenerNombreTipoComponente(tipoComponente) {
       const mapeo = {
         placa_base: 'Placa Base',
@@ -462,12 +461,100 @@ export default {
     obtenerArticulos() {
       this.isLoading = true;
       this.loading = true;
+      this.loadingItemIterator = true;
       api.get('/componentes')
         .then(response => {
           // console.log(response.data);
           this.articulos = response.data;
           this.isLoading = false;
           this.loading = false;
+          this.loadingItemIterator = false;
+        })
+        .catch(error => console.error(error));
+    },
+
+    obtenerAvalilable() {
+      this.isLoading = true;
+      this.loading = true;
+      this.loadingItemIterator = true;
+      api.get('/componentes-disponibles')
+        .then(response => {
+          // console.log(response.data);
+          this.articulos = response.data;
+          this.isLoading = false;
+          this.loading = false;
+          this.loadingItemIterator = false;
+        })
+        .catch(error => console.error(error));
+    },
+    obtenerUnavalilable() {
+      this.isLoading = true;
+      this.loading = true;
+      this.loadingItemIterator = true;
+      api.get('/componentes-no_disponibles')
+        .then(response => {
+          // console.log(response.data);
+          this.articulos = response.data;
+          this.isLoading = false;
+          this.loading = false;
+          this.loadingItemIterator = false;
+        })
+        .catch(error => console.error(error));
+    },
+
+    obtenerAllPlacaBase() {
+      this.isLoading = true;
+      this.loading = true;
+      this.loadingItemIterator = true;
+      api.get('/componentes-filterAllByPlacaBase')
+        .then(response => {
+          // console.log(response.data);
+          this.articulos = response.data;
+          this.isLoading = false;
+          this.loading = false;
+          this.loadingItemIterator = false;
+        })
+        .catch(error => console.error(error));
+    },
+    obtenerAllRam() {
+      this.isLoading = true;
+      this.loading = true;
+      this.loadingItemIterator = true;
+      api.get('/componentes-filterAllByRam')
+        .then(response => {
+          // console.log(response.data);
+          this.articulos = response.data;
+          this.isLoading = false;
+          this.loading = false;
+          this.loadingItemIterator = false;
+        })
+        .catch(error => console.error(error));
+    },
+    obtenerAllDiscoDuro() {
+      this.isLoading = true;
+      this.loading = true;
+      this.loadingItemIterator = true;
+      api.get('/componentes-filterAllByDiscoDuro')
+        .then(response => {
+          // console.log(response.data);
+          this.articulos = response.data;
+          this.isLoading = false;
+          this.loading = false;
+          this.loadingItemIterator = false;
+        })
+        .catch(error => console.error(error));
+    },
+    obtenerAllLectorCd() {
+      this.isLoading = true;
+      this.loading = true;
+      this.loadingItemIterator = true;
+      api.get('/componentes-filterAllByLectorCd')
+        .then(response => {
+          // console.log(response.data);
+          this.articulos = response.data;
+          this.isLoading = false;
+          this.loading = false;
+          this.loadingItemIterator = false;
         })
         .catch(error => console.error(error));
     },
@@ -511,6 +598,48 @@ export default {
 
         });
     },
+
+    closeDrawer() {
+      this.drawer = false;
+    },
+    openDrawer() {
+      this.drawer = true;
+    },
+
+    onClickSeeAll() {
+      this.itemsPerPage = this.itemsPerPage === 4 ? this.articulos.length : 4
+    },
+
+    toggleAllFields() {
+      this.isReadOnly = !this.isReadOnly;
+      // console.log('Toggling all fields:', this.isReadOnly);
+    },
   },
 };
 </script>
+
+<style scoped>
+.custom-chip {
+  &.v-chip {
+    /* Estilos personalizados para el chip */
+    background-color: #f5f5f5 !important;
+    color: #333333c5 !important;
+    font-size: 0.7rem;
+
+    border-radius: 20px !important;
+    padding: 8px 16px !important;
+  }
+
+  &.v-chip:not(.v-chip--selected) {
+    /* Estilos para chips no seleccionados */
+    opacity: 0.7;
+  }
+
+  &.v-chip--selected {
+    /* Estilos para chips seleccionadas */
+    background-color: #3498db !important;
+    color: white !important;
+  }
+
+}
+</style>`
