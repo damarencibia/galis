@@ -1,60 +1,54 @@
 <template>
   <div>
-    <v-dialog
-      v-model="dialog"
-      transition="dialog-bottom-transition"
-      fullscreen
-    >
+    <v-dialog v-model="dialog" transition="dialog-bottom-transition" max-width="60vh">
       <template v-slot:activator="{ props: activatorProps }">
         <v-btn class="text-none flex-grow-1" height="38" variant="flat" color="#3498db "
-          style="border-radius:8px; font-size:0.8rem;" width="220" prepend-icon="mdi-plus" v-bind="activatorProps">Nuevo Componente</v-btn>
+          style="border-radius:8px; font-size:0.8rem;" width="220" prepend-icon="mdi-plus" v-bind="activatorProps">Nuevo
+          Componente</v-btn>
 
       </template>
 
       <v-card>
-        <v-toolbar>
-          <v-btn
-            icon="mdi-close"
-            @click="dialog = false"
-          ></v-btn>
+        <v-toolbar color="#ffffff">
+          <v-btn icon="mdi-close" @click="dialog = false" :ripple="false" color="#34495e"></v-btn>
 
-          <v-toolbar-title>Nuevo Componente</v-toolbar-title>
+          <v-toolbar-title style="font-size: 0.9rem;">Nuevo Componente</v-toolbar-title>
 
-          <v-spacer></v-spacer>
 
-          <v-toolbar-items>
-            <v-btn
-              text="Guardar"
-              variant="text"
-              @click="dialog = false"
-            ></v-btn>
-          </v-toolbar-items>
         </v-toolbar>
+        <!-- <div class="d-flex justify-center">
+          <v-btn icon="mdi-restore" variant="text" @click="reset" :ripple="false" color="#34495e" density="compact">
+          </v-btn>
+        </div> -->
 
+        <v-form ref="form" class="pa-2" v-on:submit.prevent="guardarArticulo()">
 
-        <v-form ref="form" class="pa-4 pt-6" v-on:submit.prevent="guardarArticulo()" >
-          <v-text-field class="mb-4" v-model="articulo.nro_serie" label="Numero de serie" variant="underlined" outlined
-            required :counter="50" :rules="numeroSerieRules">
+          <v-text-field clearable density="compact" class="mb-4" v-model="articulo.nro_serie" label="Numero de serie" single-line
+            variant="outlined" outlined required color="#3498db" maxlength="30" :counter="30" :rules="numeroSerieRules">
           </v-text-field>
 
-          <v-text-field class="mb-4" v-model="articulo.marca" label="Marca" variant="underlined" outlined required
-            :counter="50" :rules="marcaRules"></v-text-field>
 
-          <v-select variant="underlined" class="mb-4" v-model="articulo.tipo_componente" :items="items"
-            :rules="[v => !!v || 'Componente es requerido']" label="Tipo de componente" required></v-select>
+          <v-text-field clearable density="compact" class="mb-4" v-model="articulo.marca" label="Marca" single-line
+            variant="outlined" outlined required color="#3498db" maxlength="30" :counter="30"
+            :rules="marcaRules"></v-text-field>
+
+          <v-select color="#3498db" density="compact" variant="outlined" class="mb-4" v-model="articulo.tipo_componente" :items="items"
+            :rules="[v => !!v || 'Componente es requerido']"  required></v-select>
 
           <v-checkbox v-model="checkbox" :rules="[v => !!v || ' Debe confirmar para continuar!']"
-            label="Confirmar formulario" required></v-checkbox>
+            label="Confirmar formulario" required color="#34495e"></v-checkbox>
 
           <div class="d-flex justify-center mb-6 mt-2">
-            <v-btn prepend-icon="mdi-restore" class="text-none mx-4" color="error" min-width="92" variant="outlined"
-              @click="reset" size="small">
-              Reiniciar
+
+
+            <v-btn prepend-icon="mdi-check" class="text-none" color="#3498db" block variant="flat" @click="validate">
+              Guardar
             </v-btn>
-            <v-btn prepend-icon="mdi-check" class="text-none" color="success" min-width="92" variant="outlined"
-              @click="validate" size="small">
-              Validar
-            </v-btn>
+
+
+
+
+
           </div>
         </v-form>
 
@@ -109,6 +103,7 @@ export default {
       numeroSerieRules: [
         v => !!v || 'Número de serie es requerido',
         v => (v && v.length <= 50) || 'Número de serie no debe exceder 50 characteres',
+
       ],
       marcaRules: [
         v => !!v || 'marca es requerida',
@@ -116,10 +111,10 @@ export default {
       ],
 
       items: [
-        'disco_duro',
-        'placa_base',
-        'lector_cd',
-        'memoria_ram',
+        'Disco duro',
+        'Placa madre',
+        'Memoria RAM',
+        'Lector CD',
       ],
       checkbox: false,
     }
@@ -127,10 +122,21 @@ export default {
 
   methods: {
     async guardarArticulo() {
+      if (this.articulo.tipo_componente === 'Disco duro') {
+        this.articulo.tipo_componente = 'disco_duro'
+      } else if (this.articulo.tipo_componente === 'Placa madre') {
+        this.articulo.tipo_componente = 'placa_base'
+      } else if (this.articulo.tipo_componente === 'Lector CD') {
+        this.articulo.tipo_componente = 'lector_cd'
+      } else if (this.articulo.tipo_componente === 'Memoria RAM') {
+        this.articulo.tipo_componente = 'memoria_ram'
+      }
+
+
       try {
         const response = await api.post('/componentes', this.articulo);
         api.get('/componentes');
-        this.dialog = false;
+
         // console.log(response);
 
       } catch (error) {
@@ -143,16 +149,20 @@ export default {
     },
 
     async validate() {
-    const { valid } = await this.$refs.form.validate();
+      const { valid } = await this.$refs.form.validate();
 
-    if (valid) {
-      // Guarda el objeto articulo
-      this.guardarArticulo();
-      this.$emit('component-created', this.articulo);
+      if (valid) {
+        // Guarda el objeto articulo
+        this.guardarArticulo();
+        this.$emit('component-created', this.articulo);
+        this.$refs.form.reset()
+        this.dialog = false;
+      }
+    },
+
+    reset() {
       this.$refs.form.reset()
-      this.dialog = false;
-    }
-  },
+    },
   }
 }
 </script>

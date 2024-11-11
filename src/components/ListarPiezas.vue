@@ -107,13 +107,13 @@
               <v-sheet class="px-1">
                 <v-chip-group v-model="defaultSelection" mandatory filter class="custom-chip-group"
                   :show-arrows="false">
-                  <v-chip class="custom-chip" @click="obtenerArticulos" value="Todo">Todos</v-chip>
-                  <v-chip class="custom-chip" @click="obtenerAvalilable" value="Disponible">Disponible</v-chip>
-                  <v-chip class="custom-chip" @click="obtenerUnavalilable" value="Vinculados">Vinculados</v-chip>
-                  <v-chip class="custom-chip" @click="obtenerAllPlacaBase" value="Placa Madre">Placa Madre</v-chip>
-                  <v-chip class="custom-chip" @click="obtenerAllRam" value="RAM">RAM</v-chip>
-                  <v-chip class="custom-chip" @click="obtenerAllDiscoDuro" value="Disco duro">Disco duro</v-chip>
-                  <v-chip class="custom-chip" @click="obtenerAllLectorCd" value="Lector CD">Lector CD</v-chip>
+                  <v-chip class="custom-chip" variant="outlined" @click="obtenerArticulos" value="Todo">Todos</v-chip>
+                  <v-chip class="custom-chip" variant="outlined" @click="obtenerAvalilable" value="Disponible">Disponible</v-chip>
+                  <v-chip class="custom-chip" variant="outlined" @click="obtenerUnavalilable" value="Vinculados">Vinculados</v-chip>
+                  <v-chip class="custom-chip" variant="outlined" @click="obtenerAllPlacaBase" value="Placa Madre">Placa Madre</v-chip>
+                  <v-chip class="custom-chip" variant="outlined" @click="obtenerAllRam" value="RAM">RAM</v-chip>
+                  <v-chip class="custom-chip" variant="outlined" @click="obtenerAllDiscoDuro" value="Disco duro">Disco duro</v-chip>
+                  <v-chip class="custom-chip" variant="outlined" @click="obtenerAllLectorCd" value="Lector CD">Lector CD</v-chip>
                 </v-chip-group>
               </v-sheet>
 
@@ -277,8 +277,8 @@
 
 
           <template v-slot:footer="{ page, pageCount }">
-            <v-empty-state v-if="totalRegistros === 0" class="text-blue-grey-darken-1" icon="mdi-magnify"
-              title="No se encontraron registros" color="#34495e" </v-empty-state>
+            <v-empty-state v-if="totalRegistros === 0" class="text-blue-grey-lighten-4" icon="mdi-magnify"
+              title="No se encontraron registros" color="#CFD8DC"></v-empty-state>
 
               <v-footer class="justify-space-between text-body-2 mt-4">
 
@@ -622,10 +622,9 @@ export default {
 .custom-chip {
   &.v-chip {
     /* Estilos personalizados para el chip */
-    background-color: #f5f5f5 !important;
+    background-color: #ffffff !important;
     color: #333333c5 !important;
     font-size: 0.7rem;
-
     border-radius: 20px !important;
     padding: 8px 16px !important;
   }

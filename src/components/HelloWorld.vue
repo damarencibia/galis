@@ -54,7 +54,7 @@
         &copy;{{ new Date().getFullYear() }} — damarencibia — Todos los derechos reservados
       </div>
       <div>
-        Last Commit — update_38
+        Last Commit — update_39
       </div>
       <div class="d-flex justify-space-between mb-6 mt-5">
         <a href="" class="text-decoration-none text-black mx-5" @click="$router.push('/')">Términos y condiciones</a>
