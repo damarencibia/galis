@@ -32,7 +32,7 @@
             variant="outlined" outlined required color="#3498db" maxlength="30" :counter="30"
             :rules="marcaRules"></v-text-field>
 
-          <v-select color="#3498db" density="compact" variant="outlined" class="mb-4" v-model="articulo.tipo_componente" :items="items"
+          <v-select  color="#3498db" density="compact" variant="outlined" class="mb-4" v-model="articulo.tipo_componente" :items="items"
             :rules="[v => !!v || 'Componente es requerido']"  required></v-select>
 
           <v-checkbox v-model="checkbox" :rules="[v => !!v || ' Debe confirmar para continuar!']"
@@ -97,7 +97,7 @@ export default {
       articulo: {
         nro_serie: '',
         marca: '',
-        tipo_componente: '',
+        tipo_componente: 'Disco duro',
       },
       name: '',
       numeroSerieRules: [
@@ -155,7 +155,7 @@ export default {
         // Guarda el objeto articulo
         this.guardarArticulo();
         this.$emit('component-created', this.articulo);
-        this.$refs.form.reset()
+        // this.$refs.form.reset()
         this.dialog = false;
       }
     },

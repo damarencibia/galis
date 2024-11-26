@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer floating v-model="drawer" width="230" permanent color="#ECEFF1" theme="light">
+  <v-navigation-drawer class="hidden-xs" loating v-model="drawer" width="230" permanent color="#ECEFF1" theme="light">
     <v-list class="text-center mt-5" density="compact" nav>
       <v-list-item>
 
@@ -98,206 +98,85 @@
           </template>
         </v-app-bar>
 
-        <!-- 🛸 DATA ITERATOR  -->
-        <v-data-iterator :items="articulos" :items-per-page="itemsPerPage" class="mt-2" :loading="loadingItemIterator"
-          :search="search">
-          <template v-slot:header="{ page, pageCount, prevPage, nextPage }">
-            <h1 class="text-h4 font-weight-bold d-flex  justify-space-between mb-2">
+        <v-sheet class="px-1">
+          <v-chip-group v-model="defaultSelection" mandatory filter class="custom-chip-group" :show-arrows="false">
+            <v-chip class="custom-chip" variant="outlined" @click="obtenerArticulos" value="Todo">Todos</v-chip>
+            <v-chip class="custom-chip" variant="outlined" @click="obtenerAvalilable"
+              value="Disponible">Disponible</v-chip>
+            <v-chip class="custom-chip" variant="outlined" @click="obtenerUnavalilable"
+              value="Vinculados">Vinculados</v-chip>
+            <v-chip class="custom-chip" variant="outlined" @click="obtenerAllPlacaBase" value="Placa Madre">Placa
+              Madre</v-chip>
+            <v-chip class="custom-chip" variant="outlined" @click="obtenerAllRam" value="RAM">RAM</v-chip>
+            <v-chip class="custom-chip" variant="outlined" @click="obtenerAllDiscoDuro" value="Disco duro">Disco
+              duro</v-chip>
+            <v-chip class="custom-chip" variant="outlined" @click="obtenerAllLectorCd" value="Lector CD">Lector
+              CD</v-chip>
+          </v-chip-group>
+        </v-sheet>
 
-              <v-sheet class="px-1">
-                <v-chip-group v-model="defaultSelection" mandatory filter class="custom-chip-group"
-                  :show-arrows="false">
-                  <v-chip class="custom-chip" variant="outlined" @click="obtenerArticulos" value="Todo">Todos</v-chip>
-                  <v-chip class="custom-chip" variant="outlined" @click="obtenerAvalilable" value="Disponible">Disponible</v-chip>
-                  <v-chip class="custom-chip" variant="outlined" @click="obtenerUnavalilable" value="Vinculados">Vinculados</v-chip>
-                  <v-chip class="custom-chip" variant="outlined" @click="obtenerAllPlacaBase" value="Placa Madre">Placa Madre</v-chip>
-                  <v-chip class="custom-chip" variant="outlined" @click="obtenerAllRam" value="RAM">RAM</v-chip>
-                  <v-chip class="custom-chip" variant="outlined" @click="obtenerAllDiscoDuro" value="Disco duro">Disco duro</v-chip>
-                  <v-chip class="custom-chip" variant="outlined" @click="obtenerAllLectorCd" value="Lector CD">Lector CD</v-chip>
-                </v-chip-group>
-              </v-sheet>
+        <v-data-table loading-text="Cargando..." :loading="isLoading" class="elevation-0  table-hover-effect"
+          fixed-header v-model:page="page" :headers="headers" :items="articulos" :search="search"
+          :items-per-page="itemsPerPage" style="font-size:0.9rem;">
 
-              <div class="d-flex align-center mx-1">
-                <v-btn class="me-8 text-none" variant="tonal" rounded @click="onClickSeeAll" color="#3498db"
-                  size="small" style="font-size: 0.7rem;">
-                  Ver todo
+          <template v-slot:loading>
+            <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+          </template>
+
+          <!-- <template v-slot:top></template> -->
+
+          <!-- Filas del data table -->
+          <template v-slot:item="{ item, index }">
+            <tr>
+
+
+              <td>
+                {{ item.tipo_componente }}
+              </td>
+
+              <td>
+                {{ item.nro_serie }}
+              </td>
+
+              <td>
+                {{ item.marca }}
+              </td>
+
+
+              <td>
+                <v-chip variant="flat" size="small" :color="item.disponible ? 'rgb(0,120,84)' : 'rgb(158,38,41)'"
+                  style="font-size: 0.7rem;">
+                  {{ item.disponible ? 'Si' : 'No' }}
+                </v-chip>
+              </td>
+              <td>{{ new Date(item.created_at).toLocaleString() }}</td>
+              <td>{{ new Date(item.updated_at).toLocaleString() }}</td>
+              <td>
+
+                <!-- BOTON EDITAR -->
+                <v-btn variant="tonal" class="mx-1" density="comfortable"
+                  @click="updateArticulo(item.id, item.nro_serie, item.marca, item.tipo_componente)" icon size="small">
+                  <v-icon>mdi-cog</v-icon>
+                  <v-tooltip activator="parent" location="bottom">Editar {{ item.nro_serie }}</v-tooltip>
                 </v-btn>
 
-                <div class="d-inline-flex">
-                  <v-btn color="#2980b9 " :disabled="page === 1" class="me-2" icon="mdi-chevron-left" size="x-small"
-                    variant="tonal" @click="prevPage" style="border-radius: 8px;"></v-btn>
-
-                  <v-btn color="#2980b9 " :disabled="page === pageCount" icon="mdi-chevron-right" size="x-small"
-                    variant="tonal" @click="nextPage" style="border-radius: 8px;"></v-btn>
-                </div>
-              </div>
-            </h1>
-          </template>
-
-          <template v-slot:default="{ items }">
-            <v-row>
-              <v-col v-for="(item, i) in items" :key="i" cols="12" sm="6" xl="3">
-                <v-sheet class="mx-1" border style="border-radius: 8px;">
-
-                  <!-- HEADER PARA DISCO DURO -->
-                  <v-img v-if="item.raw.tipo_componente === 'disco_duro'"
-                    :gradient="`to top right, rgba(255, 255, 255, .1), rgba(12, 146, 47, .10)`" contain max-height="100"
-                    src="@/assets/hdd.jpg" style="border-radius: 8px;"></v-img>
-                  <v-list-item v-if="item.raw.tipo_componente === 'disco_duro'" density="comfortable" lines="two">
-                    <template v-slot:title>
-                      <strong class="text-h6">
-                        Disco duro
-                      </strong>
-                      <div></div>
-                    </template>
-                  </v-list-item>
-
-                  <!-- HEADER PARA MEMORIA RAM  -->
-                  <v-img v-if="item.raw.tipo_componente === 'memoria_ram'"
-                    :gradient="`to top right, rgba(255, 255, 255, .1), rgba(166, 39, 222, .10)`" contain
-                    max-height="100" src="@/assets/ram.jpg" style="border-radius: 8px;"></v-img>
-                  <v-list-item v-if="item.raw.tipo_componente === 'memoria_ram'" density="comfortable" lines="two">
-                    <template v-slot:title>
-                      <strong class="text-h6">
-                        Memoria RAM
-                      </strong>
-                    </template>
-                  </v-list-item>
-
-                  <!-- HEADER PARA PLACA MADRE   -->
-                  <v-img v-if="item.raw.tipo_componente === 'placa_base'"
-                    :gradient="`to top right, rgba(255, 255, 255, .1), rgba(228, 196, 69, .10)`" contain
-                    max-height="100" src="@/assets/placa_madre.jpg" style="border-radius: 8px;"></v-img>
-                  <v-list-item v-if="item.raw.tipo_componente === 'placa_base'" density="comfortable" lines="two">
-                    <template v-slot:title>
-                      <strong class="text-h6">
-                        Placa madre
-                      </strong>
-                    </template>
-                  </v-list-item>
-
-                  <!-- HEADER PARA LECTOR CD   -->
-                  <v-img v-if="item.raw.tipo_componente === 'lector_cd'"
-                    :gradient="`to top right, rgba(255, 255, 255, .1), rgba(156, 82, 251, .10)`" contain
-                    max-height="100" src="@/assets/lector_cd.jpg" style="border-radius: 8px;"></v-img>
-                  <v-list-item v-if="item.raw.tipo_componente === 'lector_cd'" density="comfortable" lines="two">
-                    <template v-slot:title>
-                      <strong class="text-h6">
-                        Lector CD
-                      </strong>
-                    </template>
-                  </v-list-item>
 
 
+                <!-- BOTON ELIMINAR -->
+                <v-btn variant="tonal" density="comfortable" @click.stop="dialog = true; id = item.id" icon
+                  size="small">
+                  <v-icon>mdi-trash-can</v-icon>
+                  <v-tooltip activator="parent" location="bottom">Eliminar {{ item.nro_serie }}</v-tooltip>
+                </v-btn>
+              </td>
+            </tr>
 
-                  <!-- 🛒 TABLA DE CONTENIDOS -->
-                  <v-table class="text-caption" density="compact">
-                    <tbody>
-                      <tr align="right">
-                        <th>Serial:</th>
-
-                        <td>{{ item.raw.nro_serie.length > 30 ? item.raw.nro_serie.slice(0, 30) + '...' :
-                          item.raw.nro_serie
-                          }}</td>
-                      </tr>
-
-                      <tr align="right">
-                        <th>Sello:</th>
-
-                        <td></td>
-                      </tr>
-
-                      <tr align="right">
-                        <th>Marca:</th>
-
-                        <td>{{ item.raw.marca }}</td>
-                      </tr>
-
-                      <tr align="right">
-                        <th>Modelo:</th>
-
-                        <td></td>
-                      </tr>
-
-                      <tr align="right">
-                        <th>Disponible:</th>
-
-                        <td>{{ item.raw.disponible ? 'Si' : 'No' }}</td>
-                      </tr>
-
-                      <tr align="right">
-                        <th>Precio:</th>
-
-                        <td>$</td>
-                      </tr>
-                    </tbody>
-                  </v-table>
-
-
-
-                  <!-- 🚓 MENU DE ACCIONES -->
-                  <div class="text-end mx-2">
-                    <v-menu>
-                      <template v-slot:activator="{ props }">
-                        <v-btn class="text-none mb-1" icon rounded flat density="comfortable" v-bind="props">
-                          <v-icon color="#34495e">mdi-dots-horizontal</v-icon>
-                        </v-btn>
-                      </template>
-
-                      <v-list class="elevation-0" border>
-                        <v-list-item>
-                          <!-- BOTON EDITAR -->
-                          <v-btn variant="text" class="mx-1" density="comfortable"
-                            @click="updateArticulo(item.id, item.nro_serie, item.marca, item.tipo_componente)"
-                            prepend-icon="mdi-cog-outline" size="small" rounded>
-                            Editar
-                            <v-tooltip activator="parent" location="bottom">Editar {{ item.nro_serie
-                              }}</v-tooltip>
-                          </v-btn>
-                        </v-list-item>
-
-                        <v-list-item>
-                          <!-- BOTON ELIMINAR -->
-                          <v-btn variant="text" density="comfortable" @click.stop="dialog = true; id = item.raw.id"
-                            size="small" prepend-icon="mdi-trash-can-outline" rounded>
-                            Eliminar
-                            <v-tooltip activator="parent" location="bottom">Eliminar {{ item.nro_serie
-                              }}</v-tooltip>
-                          </v-btn>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
-                  </div>
-
-                </v-sheet>
-              </v-col>
-            </v-row>
           </template>
 
 
+          <template v-slot:bottom></template>
 
-          <template v-slot:footer="{ page, pageCount }">
-            <v-empty-state v-if="totalRegistros === 0" class="text-blue-grey-lighten-4" icon="mdi-magnify"
-              title="No se encontraron registros" color="#CFD8DC"></v-empty-state>
-
-              <v-footer class="justify-space-between text-body-2 mt-4">
-
-                <div>
-                  Page {{ page }} of {{ pageCount }}
-                </div>
-              </v-footer>
-          </template>
-
-          <template v-slot:loader>
-            <v-row>
-
-              <v-col v-for="(_, k) in [0, 1, 2]" :key="k" cols="12" sm="6" xl="3">
-                <v-skeleton-loader class="border mx-1" type="image, article"></v-skeleton-loader>
-              </v-col>
-            </v-row>
-          </template>
-        </v-data-iterator>
-
+        </v-data-table>
 
 
       </v-card>
@@ -345,6 +224,8 @@ export default {
   data() {
     return {
 
+      overlay: false,
+
       drawer: true,
       dialog: false,
       dialog_nuevo_registro: false,
@@ -365,9 +246,10 @@ export default {
       search: '',
       snackbar: false,
       headers: [
+
+        { title: 'Componente', value: 'tipo_componente', key: 'tipo_componente' },
         { title: 'Serial', value: 'nro_serie', key: 'nro_serie' },
         { title: 'Marca', value: 'marca', key: 'marca' },
-        { title: 'Tipo de Componente', value: 'tipo_componente', key: 'tipo_componente' },
         { title: 'Disponible', value: 'disponible', key: 'disponible' },
         { title: 'Creado', value: 'created_at', key: 'created_at' },
         { title: 'Modificado', value: 'updated_at', key: 'updated_at' },
@@ -638,6 +520,20 @@ export default {
     /* Estilos para chips seleccionadas */
     background-color: #3498db !important;
     color: white !important;
+  }
+
+  .even-row {
+    background-color: #DEF9C4;
+    /* Color de fondo para filas pares */
+  }
+
+  .odd-row {
+    background-color: #9CDBA6;
+    /* Color de fondo para filas impares */
+  }
+
+  .custom-progress-circular {
+    margin: 1rem;
   }
 
 }
