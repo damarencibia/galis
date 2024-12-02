@@ -59,8 +59,8 @@ export default {
     async login() {
       this.loading = true;
       try {
-        // const response = await axios.post('https://laravel-railway-production-20f4.up.railway.app/api/login', this.user);
-        const response = await axios.post('http://127.0.0.1:8000/api/login', this.user);
+        const response = await axios.post('https://laravel-railway-production-20f4.up.railway.app/api/login', this.user);
+        // const response = await axios.post('http://127.0.0.1:8000/api/login', this.user);
         const token = response.data.token;
         localStorage.setItem('authToken', token); // Almacena el token en localStorage
         this.loading = false;
